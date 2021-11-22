@@ -1,3 +1,4 @@
+'use strict';
 let expensesItem = document.querySelectorAll('.expenses-items'),
     incomeItem = document.querySelectorAll('.income-items'),
     periodAmount = document.querySelector('.period-amount');
@@ -18,11 +19,9 @@ const getStart = document.querySelector('#start'),
     targetValue = document.querySelector('.target_month-value'),
     additionalExpensesItem = document.querySelector('.additional_expenses-item'),
     periodSelect = document.querySelector('.period-select'),
-    additionalIncomeItem = document.querySelectorAll('.additional_income-item'),
+    additionalIncome = document.querySelectorAll('.additional_income'),
     expensesTitle = document.querySelector('.expenses-title'),
     targetAmount = document.querySelector('.target-amount');
-
-'use strict';
 
 const appData = {
     income: {},
@@ -79,12 +78,12 @@ const appData = {
     },
     getAddIncome: function() {
         inputIncome.forEach(function(item) {
-            let itemValue = item.value.trim();
+            const itemValue = item.value.trim();
             if (itemValue !== '') appData.addIncome.push(itemValue);
         });
     },
     addExpensesBlock: function() {
-        let cloneExpensesItem = expensesItem[0].cloneNode(true);
+        const cloneExpensesItem = expensesItem[0].cloneNode(true);
         expensesItem[0].parentNode.insertBefore(cloneExpensesItem, expAdd);
         expensesItem = document.querySelectorAll('.expenses-items');
         if (expensesItem.length === 2) {
@@ -101,7 +100,7 @@ const appData = {
 
     },
     addIncomeBlock: function() {
-        let cloneIncomeItem = incomeItem[0].cloneNode(true);
+        const cloneIncomeItem = incomeItem[0].cloneNode(true);
         cloneIncomeItem.querySelector('.income-title').value = '';
         cloneIncomeItem.querySelector('.income-amount').value = '';
         incomeItem[0].parentNode.insertBefore(cloneIncomeItem, incomeAdd);
@@ -120,8 +119,8 @@ const appData = {
     },
     getExpenses: function() {
         expensesItem.forEach(function(item) {
-            let itemExpenses = item.querySelector('.expenses-title').value;
-            let cashExpenses = item.querySelector('.expenses-amount').value;
+            const itemExpenses = item.querySelector('.expenses-title').value;
+            const cashExpenses = item.querySelector('.expenses-amount').value;
 
             if (itemExpenses !== '' && cashExpenses !== '') {
                 appData.expenses[itemExpenses] = cashExpenses;
@@ -130,8 +129,8 @@ const appData = {
     },
     getIncome: function() {
         incomeItem.forEach(function(item) {
-            let itemInCome = item.querySelector('.income-title').value;
-            let cashInCome = item.querySelector('.income-amount').value;
+            const itemInCome = item.querySelector('.income-title').value;
+            const cashInCome = item.querySelector('.income-amount').value;
             if (itemInCome !== '' && cashInCome !== '') {
                 appData.income[itemInCome] = cashInCome;
             }
@@ -193,20 +192,29 @@ const appData = {
     ucFirst: function(str) {
         if (!str) return str;
         return str[0].toUpperCase() + str.slice(1);
+    },
+    checkStringFirst: function(className, element) {
+        className.querySelector(element).value = className.querySelector(element).value.replace(/[^А-я ,]/, '');
+    },
+    checkStringSecond: function(className, element, position) {
+        className.querySelectorAll(element)[position].value = className.querySelectorAll(element)[position].value.replace(/[^А-я ,]/, '');
     }
 }
+
 incomeItem[0].querySelector('.income-title').addEventListener('input', () => {
-    incomeItem[0].querySelector('.income-title').value = incomeItem[0].querySelector('.income-title').value.replace(/[^А-я ,]/, '');
-});
-additionalIncomeItem[0].addEventListener('input', () => {
-    additionalIncomeItem[0].value = additionalIncomeItem[0].value.replace(/[^А-я ,]/, '');
-});
-additionalIncomeItem[1].addEventListener('input', () => {
-    additionalIncomeItem[1].value = additionalIncomeItem[1].value.replace(/[^А-я ,]/, '');
+    appData.checkStringFirst(incomeItem[0], '.income-title');
 });
 expensesItem[0].querySelector('.expenses-title').addEventListener('input', () => {
-    expensesItem[0].querySelector('.expenses-title').value = expensesItem[0].querySelector('.expenses-title').value.replace(/[^А-я ,]/, '');
+    appData.checkStringFirst(expensesItem[0], '.expenses-title');
 });
+
+additionalIncome[0].querySelectorAll('.additional_income-item')[0].addEventListener('input', () => {
+    appData.checkStringSecond(additionalIncome[0], '.additional_income-item', 0);
+});
+additionalIncome[0].querySelectorAll('.additional_income-item')[1].addEventListener('input', () => {
+    appData.checkStringSecond(additionalIncome[0], '.additional_income-item', 1);
+});
+
 
 getStart.addEventListener('click', appData.start);
 
