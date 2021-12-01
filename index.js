@@ -66,7 +66,6 @@ class AppData {
         targetValue.value = this.getTargetMonth();
         incomeValue.value = this.budgetMonth * periodSelect.value;
     };
-
     getAddExpenses() {
         const addExpenses = additionalExpensesItem.value.split(',');
         addExpenses.forEach(item => {
@@ -80,10 +79,6 @@ class AppData {
             if (itemValue !== '') this.addIncome.push(itemValue);
         });
     };
-    getAddExpInc() {
-
-    };
-
     getExpInc() {
         const count = item => {
             const startStr = item.className.split('-')[0];
@@ -93,8 +88,12 @@ class AppData {
                 this[startStr][itemTitle] = itemAmount;
             }
         }
-        incomeItem.forEach(count);
-        expensesItem.forEach(count);
+        if (incomeItem) {
+            incomeItem.forEach(count);
+        }
+        if (expensesItem) {
+            expensesItem.forEach(count);
+        }
         for (let key in this.income) {
             this.incomeMonth += +this.income[key];
         }
@@ -124,47 +123,21 @@ class AppData {
         if (!str) return str;
         return str[0].toUpperCase() + str.slice(1);
     };
-
-    addExpensesBlock() {
-        const cloneExpensesItem = expensesItem[0].cloneNode(true);
-        cloneExpensesItem.querySelector('.expenses-title').value = '';
-        cloneExpensesItem.querySelector('.expenses-amount').value = '';
-        expensesItem[0].parentNode.insertBefore(cloneExpensesItem, expAdd);
-        expensesItem = document.querySelectorAll('.expenses-items');
-        expensesItem.forEach((item, i) => {
-            appData.checkStringFirst(expensesItem[i], '.expenses-title');
-        });
-        if (expensesItem.length === 3) {
-            expAdd.style.display = 'none';
-        }
-    };
-    addIncomeBlock() {
-        const cloneIncomeItem = incomeItem[0].cloneNode(true);
-        cloneIncomeItem.querySelector('.income-title').value = '';
-        cloneIncomeItem.querySelector('.income-amount').value = '';
-        incomeItem[0].parentNode.insertBefore(cloneIncomeItem, incomeAdd);
-        incomeItem = document.querySelectorAll('.income-items');
-        incomeItem.forEach((item, i) => {
-            appData.checkStringFirst(incomeItem[i], '.income-title');
-        });
-        if (incomeItem.length === 3) {
-            incomeAdd.style.display = 'none';
-        }
-    };
-    addExpIncBlock(elem, selector, button) {
-        const cloneIncomeItem = incomeItem[0].cloneNode(true);
+    addExpIncBlock(element, selector, button) {
+        const cloneIncomeItem = element[0].cloneNode(true);
         cloneIncomeItem.querySelector(`.${selector}-title`).value = '';
         cloneIncomeItem.querySelector(`.${selector}-amount`).value = '';
-        incomeItem[0].parentNode.insertBefore(cloneIncomeItem, button);
-        incomeItem = document.querySelectorAll(`.${selector}-items`);
-        incomeItem.forEach((item, i) => {
-            appData.checkStringFirst(incomeItem[i], `.${selector}-title`);
+        element[0].parentNode.insertBefore(cloneIncomeItem, button);
+        console.log(element);
+        element = document.querySelectorAll(`.${selector}-items`);
+        element.forEach(item => {
+            appData.checkStringFirst(item, `.${selector}-title`);
         });
-        if (incomeItem.length === 3) {
+        if (element.length === 3) {
             button.style.display = 'none';
         }
+        return element;
     };
-
     checkStringFirst(className, element) {
         className.querySelector(element).addEventListener('input', () => {
             className.querySelector(element).value = className.querySelector(element).value.replace(/[^А-я ,]/, '');
@@ -203,22 +176,26 @@ class AppData {
                     input[i].disabled = false;
                     input[i].value = '';
                 }
-                for (let i = 0; i < expensesItem.length; i++) {
-                    if (i === 0) {
-                        this.resetInputForFisrt(expensesItem[i], '.expenses-title');
-                        this.resetInputForFisrt(expensesItem[i], '.expenses-amount');
-                    } else {
-                        this.resetInput(expensesItem[i], '.expenses-title');
-                        this.resetInput(expensesItem[i], '.expenses-amount');
+                if (expensesItem) {
+                    for (let i = 0; i < expensesItem.length; i++) {
+                        if (i === 0) {
+                            this.resetInputForFisrt(expensesItem[i], '.expenses-title');
+                            this.resetInputForFisrt(expensesItem[i], '.expenses-amount');
+                        } else {
+                            this.resetInput(expensesItem[i], '.expenses-title');
+                            this.resetInput(expensesItem[i], '.expenses-amount');
+                        }
                     }
                 }
-                for (let i = 0; i < incomeItem.length; i++) {
-                    if (i === 0) {
-                        this.resetInputForFisrt(incomeItem[i], '.income-title');
-                        this.resetInputForFisrt(incomeItem[i], '.income-amount');
-                    } else {
-                        this.resetInput(incomeItem[i], '.income-title');
-                        this.resetInput(incomeItem[i], '.income-amount');
+                if (incomeItem) {
+                    for (let i = 0; i < incomeItem.length; i++) {
+                        if (i === 0) {
+                            this.resetInputForFisrt(incomeItem[i], '.income-title');
+                            this.resetInputForFisrt(incomeItem[i], '.income-amount');
+                        } else {
+                            this.resetInput(incomeItem[i], '.income-title');
+                            this.resetInput(incomeItem[i], '.income-amount');
+                        }
                     }
                 }
                 for (let i = 0; i < resultInputPlace.childElementCount - 1; i++) {
@@ -255,13 +232,17 @@ class AppData {
             if (this.counter === 0 && salaryAmount.value !== '') {
                 getStart.disabled = true;
                 this.start();
-                for (let i = 0; i < expensesItem.length; i++) {
-                    this.assignment(expensesItem[i], '.expenses-title');
-                    this.assignment(expensesItem[i], '.expenses-amount');
+                if (expensesItem) {
+                    for (let i = 0; i < expensesItem.length; i++) {
+                        this.assignment(expensesItem[i], '.expenses-title');
+                        this.assignment(expensesItem[i], '.expenses-amount');
+                    }
                 }
-                for (let i = 0; i < incomeItem.length; i++) {
-                    this.assignment(incomeItem[i], '.income-title');
-                    this.assignment(incomeItem[i], '.income-amount');
+                if (incomeItem) {
+                    for (let i = 0; i < incomeItem.length; i++) {
+                        this.assignment(incomeItem[i], '.income-title');
+                        this.assignment(incomeItem[i], '.income-amount');
+                    }
                 }
                 for (let i = 0; i < input.length - 7; i++) {
                     input[i].disabled = true;
@@ -272,10 +253,12 @@ class AppData {
                 getStart.style.display = 'none';
             }
         });
-
-        expAdd.addEventListener('click', this.addExpensesBlock);
-
-        incomeAdd.addEventListener('click', this.addIncomeBlock);
+        incomeAdd.addEventListener('click', () => {
+            incomeItem = this.addExpIncBlock(incomeItem, 'income', incomeAdd);
+        });
+        expAdd.addEventListener('click', () => {
+            expensesItem = this.addExpIncBlock(expensesItem, 'expenses', expAdd);
+        });
 
         periodSelect.addEventListener('input', this.getPeriod);
     };
