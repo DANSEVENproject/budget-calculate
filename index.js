@@ -28,8 +28,8 @@ const getStart = document.querySelector('#start'),
     depositBank = document.querySelector('.deposit-bank'),
     depositAmount = document.querySelector('.deposit-amount'),
     depositPercent = document.querySelector('.deposit-percent'),
+    body = document.querySelector('.BODY'),
     targetAmount = document.querySelector('.target-amount');
-
 class AppData {
     constructor() {
         this.income = {};
@@ -279,19 +279,7 @@ class AppData {
                 depositBank.removeEventListener('change', this.changePercent);
                 depositBank.disabled = false;
 
-                this.income = {};
-                this.addIncome = [];
-                this.expenses = {};
-                this.addExpenses = [];
-                this.incomeMonth = 0;
-                this.deposit = false;
-                this.budgetMonth = 0;
-                this.expensesMonth = 0;
-                this.budgetDay = 0;
-                this.budget = 0;
-                this.percentDeposit = 0;
-                this.moneyDeposit = 0;
-                this.counter = 0;
+                Object.assign(this, new AppData);
                 periodSelect.value = 1;
                 this.showResult();
             }
@@ -308,16 +296,16 @@ class AppData {
                 getStart.disabled = false;
                 this.start();
                 if (expensesItem) {
-                    for (let i = 0; i < expensesItem.length; i++) {
-                        this.assignment(expensesItem[i], '.expenses-title');
-                        this.assignment(expensesItem[i], '.expenses-amount');
-                    }
+                    expensesItem.forEach((item) => {
+                        this.assignment(item, '.expenses-title');
+                        this.assignment(item, '.expenses-amount');
+                    })
                 }
                 if (incomeItem) {
-                    for (let i = 0; i < incomeItem.length; i++) {
-                        this.assignment(incomeItem[i], '.income-title');
-                        this.assignment(incomeItem[i], '.income-amount');
-                    }
+                    incomeItem.forEach((item) => {
+                        this.assignment(item, '.income-title');
+                        this.assignment(item, '.income-amount');
+                    })
                 }
                 for (let i = 0; i < input.length - 7; i++) {
                     input[i].disabled = true;
@@ -328,6 +316,7 @@ class AppData {
                 getStart.style.display = 'none';
                 depositBank.disabled = true;
             }
+            // this.save();
         });
         incomeAdd.addEventListener('click', () => {
             incomeItem = this.addExpIncBlock(incomeItem, 'income', incomeAdd);
@@ -339,6 +328,55 @@ class AppData {
         periodSelect.addEventListener('input', this.getPeriod.bind(this));
 
         depositCheck.addEventListener('change', this.depositHandler.bind(this));
+
+    }
+
+    init() {
+        //     if (localStorage.getItem('Calculator')) {
+        //         this.getLocalStorage();
+        //         let expensesItem = document.querySelectorAll('.expenses-items'),
+        //             incomeItem = document.querySelectorAll('.income-items');
+
+        //         const getStart = document.querySelector('#start'),
+        //             periodAmount = document.querySelector('.period-amount'),
+        //             input = document.querySelectorAll('input'),
+        //             tagPlus = document.querySelectorAll('button'),
+        //             incomeAdd = tagPlus[0],
+        //             expAdd = tagPlus[1],
+        //             inputIncome = document.querySelectorAll('.additional_income-item'),
+        //             salaryAmount = document.querySelector('.salary-amount'),
+        //             budgetDayValue = document.querySelector('.budget_day-value'),
+        //             budgetMonthValue = document.querySelector('.budget_month-value'),
+        //             expensesValue = document.querySelector('.expenses_month-value'),
+        //             additionaIncomeValue = document.querySelector('.additional_income-value'),
+        //             additionaExpensesValue = document.querySelector('.additional_expenses-value'),
+        //             incomeValue = document.querySelector('.income_period-value'),
+        //             targetValue = document.querySelector('.target_month-value'),
+        //             additionalExpensesItem = document.querySelector('.additional_expenses-item'),
+        //             periodSelect = document.querySelector('.period-select'),
+        //             depositCheck = document.querySelector('#deposit-check'),
+        //             additionalIncome = document.querySelectorAll('.additional_income'),
+        //             expensesTitle = document.querySelector('.expenses-title'),
+        //             buttonReset = document.querySelector('#cancel'),
+        //             resultInputPlace = document.querySelector('.result'),
+        //             depositBank = document.querySelector('.deposit-bank'),
+        //             depositAmount = document.querySelector('.deposit-amount'),
+        //             depositPercent = document.querySelector('.deposit-percent'),
+        //             body = document.querySelector('.BODY'),
+        //             targetAmount = document.querySelector('.target-amount');
+        //         this.eventListener();
+        //     } else {
+        //         this.eventListener();
+        //     }
+        this.eventListener();
+    }
+
+    getLocalStorage() {
+        body.innerHTML = localStorage.getItem('Calculator');
+    }
+
+    save() {
+        localStorage.setItem('Calculator', body.innerHTML);
     }
 }
 
@@ -346,5 +384,4 @@ const appData = new AppData();
 if (salaryAmount.value === '') {
     getStart.disabled = true;
 }
-
-appData.eventListener();
+appData.init();
