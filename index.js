@@ -234,26 +234,27 @@ class AppData {
                     input[i].value = '';
                 }
                 if (expensesItem) {
-                    for (let i = 0; i < expensesItem.length; i++) {
+                    expensesItem.forEach((item, i) => {
                         if (i === 0) {
-                            this.resetInputForFisrt(expensesItem[i], '.expenses-title');
-                            this.resetInputForFisrt(expensesItem[i], '.expenses-amount');
+                            this.resetInputForFisrt(item, '.expenses-title');
+                            this.resetInputForFisrt(item, '.expenses-amount');
                         } else {
-                            this.resetInput(expensesItem[i], '.expenses-title');
-                            this.resetInput(expensesItem[i], '.expenses-amount');
+                            this.resetInput(item, '.expenses-title');
+                            this.resetInput(item, '.expenses-amount');
                         }
-                    }
+                    })
                 }
                 if (incomeItem) {
-                    for (let i = 0; i < incomeItem.length; i++) {
+                    incomeItem.forEach((item, i) => {
                         if (i === 0) {
-                            this.resetInputForFisrt(incomeItem[i], '.income-title');
-                            this.resetInputForFisrt(incomeItem[i], '.income-amount');
+                            this.resetInputForFisrt(item, '.income-title');
+                            this.resetInputForFisrt(item, '.income-amount');
                         } else {
-                            this.resetInput(incomeItem[i], '.income-title');
-                            this.resetInput(incomeItem[i], '.income-amount');
+                            this.resetInput(item, '.income-title');
+                            this.resetInput(item, '.income-amount');
                         }
-                    }
+                    })
+
                 }
                 for (let i = 0; i < resultInputPlace.childElementCount - 1; i++) {
                     if (i === 6) resultInputPlace.children[i].querySelector('.result-total').value = 'Срок';
