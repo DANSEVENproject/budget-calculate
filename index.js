@@ -166,6 +166,18 @@ class AppData {
         element.querySelector(values).disabled = true;
     }
 
+    reset(element, id) {
+        element.forEach((item, i) => {
+            if (i === 0) {
+                this.resetInputForFisrt(item, `.${id}-title`);
+                this.resetInputForFisrt(item, `.${id}-amount`);
+            } else {
+                this.resetInput(item, `.${id}-title`);
+                this.resetInput(item, `.${id}-amount`);
+            }
+        })
+    }
+
     resetInput(element, values) {
         element.querySelector(values).value = null;
         element.remove(values);
@@ -234,27 +246,10 @@ class AppData {
                     input[i].value = '';
                 }
                 if (expensesItem) {
-                    expensesItem.forEach((item, i) => {
-                        if (i === 0) {
-                            this.resetInputForFisrt(item, '.expenses-title');
-                            this.resetInputForFisrt(item, '.expenses-amount');
-                        } else {
-                            this.resetInput(item, '.expenses-title');
-                            this.resetInput(item, '.expenses-amount');
-                        }
-                    })
+                    this.reset(expensesItem, 'expenses');
                 }
                 if (incomeItem) {
-                    incomeItem.forEach((item, i) => {
-                        if (i === 0) {
-                            this.resetInputForFisrt(item, '.income-title');
-                            this.resetInputForFisrt(item, '.income-amount');
-                        } else {
-                            this.resetInput(item, '.income-title');
-                            this.resetInput(item, '.income-amount');
-                        }
-                    })
-
+                    this.reset(incomeItem, 'income');
                 }
                 for (let i = 0; i < resultInputPlace.childElementCount - 1; i++) {
                     if (i === 6) resultInputPlace.children[i].querySelector('.result-total').value = 'Срок';
