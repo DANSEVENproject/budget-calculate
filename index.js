@@ -188,6 +188,13 @@ class AppData {
         element.querySelector(values).value = '';
     }
 
+    startInput(element, id) {
+        element.forEach((item) => {
+            this.assignment(item, `.${id}-title`);
+            this.assignment(item, `.${id}-amount`);
+        })
+    }
+
     getInfoDeposit() {
         if (this.deposit) {
             this.percentDeposit = depositPercent.value;
@@ -292,16 +299,10 @@ class AppData {
                 getStart.disabled = false;
                 this.start();
                 if (expensesItem) {
-                    expensesItem.forEach((item) => {
-                        this.assignment(item, '.expenses-title');
-                        this.assignment(item, '.expenses-amount');
-                    })
+                    this.startInput(expensesItem, 'expenses');
                 }
                 if (incomeItem) {
-                    incomeItem.forEach((item) => {
-                        this.assignment(item, '.income-title');
-                        this.assignment(item, '.income-amount');
-                    })
+                    this.startInput(incomeItem, 'income');
                 }
                 for (let i = 0; i < input.length - 7; i++) {
                     input[i].disabled = true;
